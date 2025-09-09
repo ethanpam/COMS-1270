@@ -20,4 +20,21 @@ while True:
     if user_input == "ENTER":
         break
 
-noun2 = input("Please enter a noun: ")
+heroName = input("Enter the hero's name: ")
+while True:
+    heroGender = input("Enter the hero's gender (m) or (f)") #Not efficient if I want capitals but it works
+    if heroGender == "m":
+        gender = "male"
+        genderSubject = "he" 
+        genderPronoun = "his"
+        break
+    if heroGender == "f":
+        gender = "female"
+        genderSubject = "she"
+        genderPronoun = "her"
+        break    
+        
+villageName = input("Enter a village name: ")
+
+print("One day, a young" + " " + gender, "adventurer name", heroName, "lived in a deserted village named " + villageName + ". Unlike many other adventurers,", heroName, "spent many years training to defeat the demon king")
+
