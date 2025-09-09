@@ -22,7 +22,7 @@ while True:
 
 heroName = input("Enter the hero's name: ")
 while True:
-    heroGender = input("Enter the hero's gender (m) or (f)") #Not efficient if I want capitals but it works
+    heroGender = input("Enter the hero's gender (m) or (f): ") #Not efficient if I want capitals but it works
     if heroGender == "m":
         gender = "male"
         genderSubject = "he" 
