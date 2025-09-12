@@ -22,7 +22,7 @@ while True:
 
 heroName = input("Enter the hero's name: ")
 while True:
-    heroGender = input("Enter the hero's gender (m) or (f): ") #Not efficient if I want capitals but it works
+    heroGender = input("Enter the hero's gender (m) or (f): ") #Not efficient if I want capitals but it works in a way I structure it
     if heroGender == "m":
         gender = "male"
         genderSubject = "he" 
@@ -37,4 +37,9 @@ while True:
 villageName = input("Enter a village name: ")
 
 print("One day, a young" + " " + gender, "adventurer name", heroName, "lived in a deserted village named " + villageName + ". Unlike many other adventurers,", heroName, "spent many years training to defeat the demon king")
+
+while True:
+    user_input = input("\nType 'ENTER' to continue... ")
+    if user_input == "ENTER":
+        break
 
