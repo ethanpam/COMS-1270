@@ -90,5 +90,3 @@ emotion = input("Enter an emotion: ")
 color = input("Enter your favorite color: ")
 pattern = input("Enter a pattern (e.g. polka dots): ")
 print(f"\nOne day at Iowa State, {name} walked into COMS-1270 with full confident. But when {name} pulled out their bag and opened it, a whole bunch of {object} came out! The class began to laugh at {name}, heck even {profName}. {name} truly felt {emotion}, their face turned {color} with {pattern} patterns all over their face. In the end, {profName} said that it was just a normal day at Iowa State but {name} never showed up to class again.")
-
-#Thanks for grading my first assignment, if your curious on why Zany Text #1 is so long, its because I didn't know if they had to be different stories. I'll use piazza next time. 

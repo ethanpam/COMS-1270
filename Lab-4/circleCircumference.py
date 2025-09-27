@@ -1,9 +1,9 @@
-#Ethan Pham        9-18-25
+#Ethan Pham        9-11-25
 #Lab 2 - This code calculates a circle's circumfernece by multiplying 2 with pie and radius
 
 import math
 
-def cc(r):
+def circleCircumference(r):
     # Citation - https://www.khanacademy.org/a/radius-diameter-circumference
     # Citation - Author: Khan Academy
     # Citation - Date Published:2-12-2020 
@@ -12,7 +12,7 @@ def cc(r):
 
 def main():
     radius = int(input("Enter the radius of the base: "))
-    answer = cc(radius)
+    answer = circleCircumference(radius)
     print(f"Your circumference was {answer}")
 
 if __name__ == "__main__":
