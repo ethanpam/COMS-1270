@@ -12,7 +12,7 @@ def l(v):
 def r(v):
     t.right(v)
 t.screen.bgcolor("black")
-t.speed(5)
+t.speed(1)
 t.pensize(10)
 t.begin_fill()
 t.pencolor("red")
