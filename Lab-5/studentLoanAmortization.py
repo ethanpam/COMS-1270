@@ -9,6 +9,16 @@
 #function takes input of these ^
 #studentLoanAmortization prints out columns: Period Due, Computed Interest, Principal Due, Principal Balance
 
+'''
+Calculates the student loan of the user over a period of time
+
+@param prinicpal - The principal of the school
+@param yearlyInterestRate - the interest rate of the current of year of school
+@param numbersOfYear - The period of your student loan amortization
+@return - int value tat
+
+#Taught by Sai Watashi - JavaDoc comments to develop the habit later on
+'''
 def studentLoanAmortization(principal, yearlyInterestRate, numberOfYears):
     i = yearlyInterestRate/12
     n = numberOfYears * 12
