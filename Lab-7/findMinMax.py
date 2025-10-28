@@ -1,28 +1,30 @@
+def findMin(int_numbers):
+    min = int_numbers[0]
+    for i in int_numbers:
+        if min > i:
+            min = i
+    return min
+
+def findMax(int_numbers):
+    max = 0
+    for i in int_numbers:
+        if max < i:
+            max = i
+    return max
+
 def main():
-    initList = takeIntList()
-    newLst = []
-    '''
-    for
-    .int(val)
-    valint.app(Val)
-    '''
-    new = [1,2,3,4,-1,10,3]
-    valMin = new[0]
-    for 
-        if val < valMin:
-            newm=val
-
-def takeIntList():
-    lst=[]
+    str_numbers = []
+    int_numbers = []
     while True:
-        val = input("i/p int or * to end")
-        if val != '*':
-            lst.append(val)
-        else:
+        number = str(input("Input value (* to stop): "))
+        if number == "*":
             break
-    return lst
-
-
+        else:
+            str_numbers.append(number)
+    for i in str_numbers:
+        int_numbers.append(int(i))
+    print(f"Your lowest number was: {findMin(int_numbers)}")
+    print(f"Your highest number was: {findMax(int_numbers)}")
 
 if __name__ == "__main__":
     main()
