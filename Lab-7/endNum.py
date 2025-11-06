@@ -1,8 +1,8 @@
+#Ethan Pham         10-24-25
+#Puts desire number into end of list
+
 def endNum(intList, num):
     numList = []
-    for i in intList:
-        intList.append(int(i))
-        intList.remove(i)
     for i in intList:
         if i == num:
             numList.append(i)
@@ -14,17 +14,14 @@ def endNum(intList, num):
 def main():
     intList = []
     while True:
-        n = str(input("Enter integer (* to stop): "))
+        n = input("Enter number (* to stop): ")
         if n == "*":
             break
         else:
-            intList.append(n)
+            intList.append(int(n))
     num = int(input("What is num?: "))   
     print(endNum(intList, num))
 
 
 if __name__ == "__main__":
     main()
-"""
-NOT FINISHED
-"""

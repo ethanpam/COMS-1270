@@ -1,3 +1,6 @@
+# Ethan Pham         10-24-25
+# Palindrome a list
+
 def palindromeList(palList):
     j = 0
     for i in palList:

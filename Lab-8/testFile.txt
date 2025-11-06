@@ -1,0 +1,5 @@
+This ¼ is Û the Ä test Ò file •
+You Ü should Å not ä see Ž any ‰
+non-ASCII ² characters Š
+when Å it Ò is ‘ cleaned Œ
+up ¹ properly... Ž

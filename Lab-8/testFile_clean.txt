@@ -1,0 +1,5 @@
+This  is  the  test  file 
+You  should  not  see  any 
+non-ASCII  characters 
+when  it  is  cleaned 
+up  properly... 

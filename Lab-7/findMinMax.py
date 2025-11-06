@@ -1,3 +1,6 @@
+#Ethan Pham         10-24-25
+#Returns min and max
+
 def findMin(int_numbers):
     min = int_numbers[0]
     for i in int_numbers:

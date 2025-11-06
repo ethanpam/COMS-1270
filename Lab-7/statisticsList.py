@@ -1,9 +1,8 @@
+#Ethan Pham         10-24-25
+#Finds the mean and median of a random list
 import random
 
 def generateInput() -> list[int]:
-    """
-    
-    """
     randoList = []
     for i in range(random.randint(200,500)):
         j = random.randint(1,2000)
@@ -34,7 +33,6 @@ def findMedian(randoList: list[int]) -> float:
         return (randoList[((len(randoList)//2)-1)] + randoList[len(randoList)//2])/2
     else:
         return randoList[len(randoList)//2]
-
 
 def main():
     randoList = generateInput()
