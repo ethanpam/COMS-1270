@@ -23,6 +23,8 @@ def divide(a, b):
     Divides the first number by the second.
     Raises an exception if division by zero is attempted.
     """
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
     return a / b 
 
 def power(base, exponent):
@@ -56,6 +58,7 @@ def sum_of_digits(n):
     """
     Returns the sum of digits of a number.
     """
+    n = abs(n)
     return sum(int(digit) for digit in str(n))
 
 def gcd(a, b):
@@ -64,12 +67,14 @@ def gcd(a, b):
     """
     while b != 0:
         a, b = b, a % b
-    return a 
+    return abs(a)
 
 def fib(n):
     """
     Returns the nth Fibonacci number.
     """
+    if n < 0:
+        raise ValueError("Input cannot be negative")
     if n <= 1:
         return n
     a, b = 0, 1
@@ -87,6 +92,8 @@ def square_root(n):
     """
     Returns the square root of a number in the set of real numbers.
     """
+    if n < 0:
+        raise ValueError("Cannot take square root of a negative number")
     return n ** 0.5
 
 def abs_diff(a, b):
@@ -102,6 +109,8 @@ def log(a, base=10):
     import math
     if a <= 0:
         raise ValueError("Logarithm undefined for non-positive values")
+    if base <= 0 or base == 1:
+        raise ValueError("Invalid base for logarithm")
     return math.log(a, base) 
 
 def mod(a, b):
@@ -114,12 +123,16 @@ def mean(numbers):
     """
     Returns the mean of a list of numbers.
     """
+    if len(numbers) == 0:
+        raise ValueError("numbers must not be empty")
     return sum(numbers) / len(numbers)
 
 def median(numbers):
     """
     Returns the median of a list of numbers.
     """
+    if len(numbers) == 0:
+        raise ValueError("numbers must not be empty")
     sorted_numbers = sorted(numbers)
     n = len(sorted_numbers)
     if n % 2 == 0:
@@ -130,6 +143,8 @@ def mode(numbers):
     """
     Returns the mode of a list of numbers (most frequent value).
     """
+    if len(numbers) == 0:
+        raise ValueError("numbers must not be empty")
     from collections import Counter
     counts = Counter(numbers)
     return counts.most_common(1)[0][0]
@@ -138,22 +153,26 @@ def celsius_to_fahrenheit(celsius):
     """
     Converts Celsius to Fahrenheit.
     """
-    return celsius * 9/4 + 32
+    return celsius * 9/5 + 32
 
 def fahrenheit_to_celsius(fahrenheit):
     """
     Converts Fahrenheit to Celsius.
     """
-    return (fahrenheit - 32) * 4/9
+    return (fahrenheit - 32) * 5/9
 
 def inverse(a):
     """
     Returns the multiplicative inverse of a number.
     """
+    if a == 0:
+        raise ValueError("Cannot invert zero")
     return 1 / a
 
 def triangular_number(n):
     """
     Returns the nth triangular number (sum of the first n positive integers).
     """
+    if n < 0:
+        raise ValueError("Input cannot be negative")
     return n * (n + 1) // 2

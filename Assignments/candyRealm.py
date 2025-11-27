@@ -57,17 +57,8 @@ def playerAssign():
     print(f"\nPlayer Order:\n1.{players[0]['name']}\n2.{players[1]['name']}\n3.{players[2]['name']}\n4.{players[3]['name']}")
     return players
 
-def card():
+def card(copies):
     deck = []
-    while True:
-        try:
-            copies = int(input("How many copies of each cards [1-5]?: "))
-            if 1 <= copies <= 5:
-                break
-            else:
-                print("Enter a value between [1-5]")
-        except ValueError:
-            print("Invalid Input")
     print("Adding Cards")
     for _ in range(copies):
         deck.append("R")
@@ -90,10 +81,10 @@ def playingBoard(players, deck):
         board.append("G")
     random.shuffle(board)
     board.append("GOAL!")
-    print(f"{players[0]["name"]:>11}")
-    print(f"{players[1]["name"]:>11}")
-    print(f"{players[2]["name"]:>11}")
-    print(f"{players[3]["name"]:>11}")
+    print(f"{players[0]["name"]:>{4 + (2*(players[3]["tile"]))}}")
+    print(f"{players[1]["name"]:>{4 + (2*(players[3]["tile"]))}}")
+    print(f"{players[2]["name"]:>{4 + (2*(players[3]["tile"]))}}")
+    print(f"{players[3]["name"]:>{4 + (2*(players[3]["tile"]))}}")
     print(f"{"START":>7}",end='')
     for title in board[:18]:
         print(f"{title:>4}", end='')
@@ -103,14 +94,15 @@ def playingBoard(players, deck):
     for card in deck[:18]:
         print(f"{card:>4}", end='')
     print()
+    return board
 
-def turn(players, deck):
+def turn(players, deck, copies):
     playerTurn = 0
     while True:
         playingBoard(players, deck)
         choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
         if choice.lower() == "d":
-            draw(players, deck)
+            draw(players, deck, playerTurn, copies)
         elif choice.lower() == "s":
             shuffling("deck", deck)
         elif choice.lower() == "q":
@@ -119,13 +111,35 @@ def turn(players, deck):
         if playerTurn >= len(players):
             playerTurn = 0
 
-def draw(players, deck):
-    pass
+def draw(players, deck, playerTurn, copies):
+    board = playingBoard(players, deck)
+    tile = 0
+    while True:
+        if len(deck) == 0:
+            card(copies)
+        elif len(board[tile + players[playerTurn]["tile"]]) > 18:
+            print(f"{players[playerTurn]["name"]} won")
+            return
+        elif deck[0] == board[tile + players[playerTurn]["tile"]]:
+            players[playerTurn]["tile"] += tile
+            break
+        else:
+            tile += 1
+    del deck[0]
 
 def candyRealm():
     players = playerAssign()
-    deck = card()
-    turn(players, deck)
+    while True:
+        try:
+            copies = int(input("How many copies of each cards [1-5]?: "))
+            if 1 <= copies <= 5:
+                break
+            else:
+                print("Enter a value between [1-5]")
+        except ValueError:
+            print("Invalid Input")
+    deck = card(copies)
+    turn(players, deck, copies)
 
 def main():
     while True:
