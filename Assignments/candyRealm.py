@@ -69,8 +69,7 @@ def card(copies):
         deck.append("G")
     deck = shuffling("deck", deck)
     return deck
-
-def playingBoard(players, deck):
+def buildBoard():
     board = []
     for _ in range(3):
         board.append("R")
@@ -81,6 +80,9 @@ def playingBoard(players, deck):
         board.append("G")
     random.shuffle(board)
     board.append("GOAL!")
+    return board
+
+def playingBoard(players, deck, board):
     print(f"{players[0]["name"]:>{4 + (2*(players[3]["tile"]))}}")
     print(f"{players[1]["name"]:>{4 + (2*(players[3]["tile"]))}}")
     print(f"{players[2]["name"]:>{4 + (2*(players[3]["tile"]))}}")
@@ -94,15 +96,16 @@ def playingBoard(players, deck):
     for card in deck[:18]:
         print(f"{card:>4}", end='')
     print()
-    return board
+    return
 
-def turn(players, deck, copies):
+def turn(players, deck, copies, board):
     playerTurn = 0
     while True:
-        playingBoard(players, deck)
+        checkEmpty(deck, copies)
+        playingBoard(players, deck, board)
         choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
         if choice.lower() == "d":
-            draw(players, deck, playerTurn, copies)
+            draw(players, deck, playerTurn, copies, board)
         elif choice.lower() == "s":
             shuffling("deck", deck)
         elif choice.lower() == "q":
@@ -111,22 +114,22 @@ def turn(players, deck, copies):
         if playerTurn >= len(players):
             playerTurn = 0
 
-def draw(players, deck, playerTurn, copies):
-    board = playingBoard(players, deck)
-    tile = 0
+def draw(players, deck, playerTurn, copies, board):
+    checkEmpty(deck, copies)
+    playingBoard(players, deck, board)
+    startPos = players[playerTurn]["tile"]
+    drawingCard = deck[0]
+    postion = startPos
     while True:
-        if len(deck) == 0:
-            card(copies)
-        elif len(board[tile + players[playerTurn]["tile"]]) > 18:
-            print(f"{players[playerTurn]["name"]} won")
-            return
-        elif deck[0] == board[tile + players[playerTurn]["tile"]]:
-            players[playerTurn]["tile"] += tile
-            break
-        else:
-            tile += 1
-    del deck[0]
+        postion += 1
+        if postion >= len(board):
+            print("f{players[playerTurn]["name"]}")
 
+def checkEmpty(deck, copies):
+    if len(deck) == 0:
+        deck[:] = card(copies)
+        return deck
+    
 def candyRealm():
     players = playerAssign()
     while True:
