@@ -35,10 +35,10 @@ def shuffling(word, shuffle):
 
 def playerAssign():
     players = [
-        {'name': 'Bot1' ,'Bot' : True, 'tile': 1},
-        {'name': 'Bot2' ,'Bot' : True, 'tile': 1},
-        {'name': 'Bot3' ,'Bot' : True, 'tile': 1},
-        {'name': 'Bot4' ,'Bot' : True, 'tile': 1}
+        {'name': 'Bot1' ,'Bot' : True, 'tile': 0},
+        {'name': 'Bot2' ,'Bot' : True, 'tile': 0},
+        {'name': 'Bot3' ,'Bot' : True, 'tile': 0},
+        {'name': 'Bot4' ,'Bot' : True, 'tile': 0}
     ]
     while True:
         try:
@@ -83,10 +83,11 @@ def buildBoard():
     return board
 
 def playingBoard(players, deck, board):
-    print(f"{players[0]["name"]:>{4 + (2*(players[3]["tile"]))}}")
-    print(f"{players[1]["name"]:>{4 + (2*(players[3]["tile"]))}}")
-    print(f"{players[2]["name"]:>{4 + (2*(players[3]["tile"]))}}")
-    print(f"{players[3]["name"]:>{4 + (2*(players[3]["tile"]))}}")
+    print(f"{players[0]['name']:>{7 + 4 * players[0]['tile']}}")
+    print(f"{players[1]['name']:>{7 + 4 * players[1]['tile']}}")
+    print(f"{players[2]['name']:>{7 + 4 * players[2]['tile']}}")
+    print(f"{players[3]['name']:>{7 + 4 * players[3]['tile']}}")
+
     print(f"{"START":>7}",end='')
     for title in board[:18]:
         print(f"{title:>4}", end='')
@@ -119,11 +120,19 @@ def draw(players, deck, playerTurn, copies, board):
     playingBoard(players, deck, board)
     startPos = players[playerTurn]["tile"]
     drawingCard = deck[0]
-    postion = startPos
+    position = startPos
     while True:
-        postion += 1
-        if postion >= len(board):
-            print("f{players[playerTurn]["name"]}")
+        position += 1
+        last_tile = len(board)
+        if startPos == last_tile:
+            if position == last_tile + 1:
+                print(f"{players[playerTurn]['name']} won!")
+                main()
+                return
+        if position <= last_tile and board[position-1] == drawingCard:
+            players[playerTurn]["tile"] = position
+            break
+    del deck[0]
 
 def checkEmpty(deck, copies):
     if len(deck) == 0:
@@ -142,7 +151,8 @@ def candyRealm():
         except ValueError:
             print("Invalid Input")
     deck = card(copies)
-    turn(players, deck, copies)
+    board = buildBoard()
+    turn(players, deck, copies, board)
 
 def main():
     while True:
