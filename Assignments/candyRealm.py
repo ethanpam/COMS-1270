@@ -33,29 +33,10 @@ def shuffling(word, shuffle):
     print()
     return shuffle
 
-def playerAssign():
-    players = [
-        {'name': 'Bot1' ,'Bot' : True, 'tile': 0},
-        {'name': 'Bot2' ,'Bot' : True, 'tile': 0},
-        {'name': 'Bot3' ,'Bot' : True, 'tile': 0},
-        {'name': 'Bot4' ,'Bot' : True, 'tile': 0}
-    ]
-    while True:
-        try:
-            count = int(input("How many human player? [1-4]: "))
-            if 1 <= count <= 4:
-                break
-            else:
-                print("Enter value between 1-4")
-        except ValueError:
-            print("Invalid input")
-    for i in range(int(count)):
-            player = input(f"What is the name of player {i + 1}: ")
-            players[i]['name'] = player
-            players[i]['Bot'] = False
-    player = shuffling("player order", players)
-    print(f"\nPlayer Order:\n1.{players[0]['name']}\n2.{players[1]['name']}\n3.{players[2]['name']}\n4.{players[3]['name']}")
-    return players
+def checkEmpty(deck, copies):
+    if len(deck) == 0:
+        deck[:] = card(copies)
+        return deck
 
 def card(copies):
     deck = []
@@ -82,6 +63,30 @@ def buildBoard():
     board.append("GOAL!")
     return board
 
+def playerAssign():
+    players = [
+        {'name': 'Bot1' ,'Bot' : True, 'tile': 0},
+        {'name': 'Bot2' ,'Bot' : True, 'tile': 0},
+        {'name': 'Bot3' ,'Bot' : True, 'tile': 0},
+        {'name': 'Bot4' ,'Bot' : True, 'tile': 0}
+    ]
+    while True:
+        try:
+            count = int(input("How many human player? [1-4]: "))
+            if 1 <= count <= 4:
+                break
+            else:
+                print("Enter value between 1-4")
+        except ValueError:
+            print("Invalid input")
+    for i in range(int(count)):
+            player = input(f"What is the name of player {i + 1}: ")
+            players[i]['name'] = player
+            players[i]['Bot'] = False
+    shuffling("player order", players)
+    print(f"\nPlayer Order:\n1.{players[0]['name']}\n2.{players[1]['name']}\n3.{players[2]['name']}\n4.{players[3]['name']}")
+    return players
+
 def playingBoard(players, deck, board):
     print(f"{players[0]['name']:>{7 + 4 * players[0]['tile']}}")
     print(f"{players[1]['name']:>{7 + 4 * players[1]['tile']}}")
@@ -101,54 +106,69 @@ def playingBoard(players, deck, board):
 
 def turn(players, deck, copies, board):
     playerTurn = 0
-    while True and players[playerTurn]['Bot'] == False:
+    while True:
         checkEmpty(deck, copies)
         playingBoard(players, deck, board)
-        choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
-        if choice.lower() == "d":
-            draw(players, deck, playerTurn, copies, board)
-        elif choice.lower() == "s":
-            shuffling("deck", deck)
-        elif choice.lower() == "q":
-            return main()
-        playerTurn += 1
-        if playerTurn >= len(players):
-            playerTurn = 0
-    else:
-        checkEmpty(deck, copies)
-        playingBoard(players, deck, board)
-        choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
-        if choice.lower() == "d":
-            draw(players, deck, playerTurn, copies, board)
-        elif choice.lower() == "s":
-            shuffling("deck", deck)
+        if players[playerTurn]["Bot"]:
+            print(f"{players[playerTurn]["name"]} thinking...")
+            time.sleep(1)
+            choice = botChoice(players, deck, playerTurn, board)
+            if choice == 'd':
+                print(f"{players[playerTurn]["name"]} chooses to draw {deck[0]} card.")
+                won = draw(players, deck, playerTurn, copies, board)
+                if won:
+                    return
+                else:
+                    time.sleep(.3)
+            elif choice == 's':
+                print(f"{players[playerTurn]["name"]} chooses to shuffle the deck")
+                shuffling("deck", deck)
+        else:
+            choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
+            if choice.lower() == "d":
+                won = draw(players, deck, playerTurn, copies, board)
+                if won:
+                    return
+            elif choice.lower() == "s":
+                shuffling("deck", deck)
+            elif choice.lower() == "q":
+                return main()
+            else:
+                print("Invalid Input")
+                continue
         playerTurn += 1
         if playerTurn >= len(players):
             playerTurn = 0
 
+def botChoice(players, deck, playerTurn, board):
+    startPos = players[playerTurn]['tile']
+    drawingCard = deck[0]
+    useful = False
+    for i in range(1,7):
+        if startPos + i < len(board) and board[startPos + i] == drawingCard:
+            useful = True
+            break
+    if useful:
+        return "d"
+    else:
+        return "s"
+
 def draw(players, deck, playerTurn, copies, board):
     checkEmpty(deck, copies)
-    playingBoard(players, deck, board)
     startPos = players[playerTurn]["tile"]
     drawingCard = deck[0]
     position = startPos
+    last_tile = len(board) - 1
     while True:
         position += 1
-        last_tile = len(board)
-        if startPos == last_tile:
-            if position == last_tile + 1:
-                print(f"{players[playerTurn]['name']} won!")
-                main()
-                return
+        if position == last_tile + 1:
+            print(f"{players[playerTurn]['name']} won!")
+            return True
         if position <= last_tile and board[position-1] == drawingCard:
             players[playerTurn]["tile"] = position
             break
     del deck[0]
-
-def checkEmpty(deck, copies):
-    if len(deck) == 0:
-        deck[:] = card(copies)
-        return deck
+    return False
     
 def candyRealm():
     players = playerAssign()
