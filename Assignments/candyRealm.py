@@ -101,7 +101,7 @@ def playingBoard(players, deck, board):
 
 def turn(players, deck, copies, board):
     playerTurn = 0
-    while True:
+    while True and players[playerTurn]['Bot'] == False:
         checkEmpty(deck, copies)
         playingBoard(players, deck, board)
         choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
@@ -111,6 +111,17 @@ def turn(players, deck, copies, board):
             shuffling("deck", deck)
         elif choice.lower() == "q":
             return main()
+        playerTurn += 1
+        if playerTurn >= len(players):
+            playerTurn = 0
+    else:
+        checkEmpty(deck, copies)
+        playingBoard(players, deck, board)
+        choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
+        if choice.lower() == "d":
+            draw(players, deck, playerTurn, copies, board)
+        elif choice.lower() == "s":
+            shuffling("deck", deck)
         playerTurn += 1
         if playerTurn >= len(players):
             playerTurn = 0
