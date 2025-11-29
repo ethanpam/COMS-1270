@@ -114,12 +114,13 @@ def turn(players, deck, copies, board):
             time.sleep(1)
             choice = botChoice(players, deck, playerTurn, board)
             if choice == 'd':
+                time.sleep(random.choice([.5, 2.5]))
                 print(f"{players[playerTurn]["name"]} chooses to draw {deck[0]} card.")
                 won = draw(players, deck, playerTurn, copies, board)
                 if won:
                     return
                 else:
-                    time.sleep(.3)
+                    time.sleep(1)
             elif choice == 's':
                 print(f"{players[playerTurn]["name"]} chooses to shuffle the deck")
                 shuffling("deck", deck)
@@ -161,12 +162,15 @@ def draw(players, deck, playerTurn, copies, board):
     last_tile = len(board) - 1
     while True:
         position += 1
-        if position == last_tile + 1:
-            print(f"{players[playerTurn]['name']} won!")
-            return True
+        # if position > last_tile:
+        #     print(f"{players[playerTurn]['name']} cannot move with {drawingCard}")
+        #     return False
         if position <= last_tile and board[position-1] == drawingCard:
             players[playerTurn]["tile"] = position
             break
+    if position == last_tile:
+        print(f"{players[playerTurn]['name']} won!")
+        return True
     del deck[0]
     return False
     
