@@ -1,7 +1,9 @@
 # Ethan Pham          7-19-2024
 # Assignment #6
 #
-# This is an digital verison of the classic popular game called 'Candy Land'
+# A digital version of the classic board game "Candy Land."
+# Players take turns drawing colored cards to move across a randomized board.
+# The goal is to reach the GOAL tile before the other players.
 
 import random
 import time
@@ -14,15 +16,20 @@ def printTitleMaterial():
 def instruction():
     print("\nGAME INSTRUCTION")
     print("----------------")
-    print("Goal:\nBe the first player to travel across the Candy Realm board and reach the GOAL space\n")
-    print("How to play:")
-    print("-Play with four players, either bots or human players")
-    print("-Each player takes a turn\nOn the players turn, they may draw or shuffle the deck or even quit to main menu")
-    print("-The deck itself contains colored cards")
-    print("-The number of copies of each card is chosen before the game begins")
-    print("-When the deck runs out, it is reshuffled automatically")
+    print("Goal:")
+    print("Be the first player to travel across the Candy Realm board and reach the GOAL space.\n")
+    print("How to Play:")
+    print("- Play with four players, either bots or human players.")
+    print("- Each player takes a turn. On your turn, you may draw a card, shuffle the deck, or return to the main menu.")
+    print("- The deck contains colored cards (R, P, Y, B, O, G).")
+    print("- Before the game begins, you choose how many copies of each color card are added to the deck.")
+    print("- When the deck runs out of cards, it is reshuffled automatically.\n")
+    print("Movement Rules:")
+    print("- When you draw a colored card, you move forward to the NEXT tile with that color.")
+    print("- If there are no more tiles of that color ahead of you, you cannot move and the drawn card is discarded.")
+    print("- If you are already on the final colored tile, ANY card you draw will move you into the GOAL space and you win.\n")
     while True:
-        if input("\nEnter [back] to return to main menu: ") == "back":
+        if input("Enter [back] to return to main menu: ").lower() == "back":
             return main()
 
 def shuffling(word, shuffle):
@@ -50,6 +57,7 @@ def card(copies):
         deck.append("G")
     deck = shuffling("deck", deck)
     return deck
+
 def buildBoard():
     board = []
     for _ in range(3):
@@ -80,19 +88,24 @@ def playerAssign():
         except ValueError:
             print("Invalid input")
     for i in range(int(count)):
+        while True:
             player = input(f"What is the name of player {i + 1}: ")
-            players[i]['name'] = player
-            players[i]['Bot'] = False
+            if len(player) > 7:
+                print("Player name is too long")
+            else:
+                players[i]['name'] = player
+                players[i]['Bot'] = False
+                break
     shuffling("player order", players)
     print(f"\nPlayer Order:\n1.{players[0]['name']}\n2.{players[1]['name']}\n3.{players[2]['name']}\n4.{players[3]['name']}")
     return players
 
 def playingBoard(players, deck, board):
-    print(f"{players[0]['name']:>{7 + 4 * players[0]['tile']}}")
-    print(f"{players[1]['name']:>{7 + 4 * players[1]['tile']}}")
-    print(f"{players[2]['name']:>{7 + 4 * players[2]['tile']}}")
-    print(f"{players[3]['name']:>{7 + 4 * players[3]['tile']}}")
-
+    print("-------------------------------------------------------------------------------------------")
+    print(f"{players[0]['name']:>{4 * players[0]['tile'] + 7}}")
+    print(f"{players[1]['name']:>{4 * players[1]['tile'] + 7}}")
+    print(f"{players[2]['name']:>{4 * players[2]['tile'] + 7}}")
+    print(f"{players[3]['name']:>{4 * players[3]['tile'] + 7}}")
     print(f"{"START":>7}",end='')
     for title in board[:18]:
         print(f"{title:>4}", end='')
@@ -114,8 +127,9 @@ def turn(players, deck, copies, board):
             time.sleep(1)
             choice = botChoice(players, deck, playerTurn, board)
             if choice == 'd':
+                drawingcard = deck[0]  
                 time.sleep(random.choice([.5, 2.5]))
-                print(f"{players[playerTurn]["name"]} chooses to draw {deck[0]} card.")
+                print(f"{players[playerTurn]["name"]} chooses to draw {drawingcard} card.")
                 won = draw(players, deck, playerTurn, copies, board)
                 if won:
                     return
@@ -127,7 +141,9 @@ def turn(players, deck, copies, board):
         else:
             choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
             if choice.lower() == "d":
+                drawingcard = deck[0]  
                 won = draw(players, deck, playerTurn, copies, board)
+                print(f"{players[playerTurn]["name"]} chooses to draw {drawingcard} card.")
                 if won:
                     return
             elif choice.lower() == "s":
@@ -138,42 +154,43 @@ def turn(players, deck, copies, board):
                 print("Invalid Input")
                 continue
         playerTurn += 1
-        if playerTurn >= len(players):
+        if playerTurn >= 4:
             playerTurn = 0
 
 def botChoice(players, deck, playerTurn, board):
     startPos = players[playerTurn]['tile']
     drawingCard = deck[0]
-    useful = False
-    for i in range(1,7):
+    for i in range(len(board)):
         if startPos + i < len(board) and board[startPos + i] == drawingCard:
-            useful = True
-            break
-    if useful:
-        return "d"
+            return 'd'
+    if random.random() < random.random():
+        return 's'
     else:
-        return "s"
+        return 'd'
 
 def draw(players, deck, playerTurn, copies, board):
     checkEmpty(deck, copies)
-    startPos = players[playerTurn]["tile"]
-    drawingCard = deck[0]
-    position = startPos
-    last_tile = len(board) - 1
+    position = players[playerTurn]["tile"]
+    last_color_tile = len(board) - 1
+    goal_tile = len(board)
+    if position == last_color_tile:
+        players[playerTurn]["tile"] = goal_tile
+        print(f"{players[playerTurn]['name']} won!")
+        del deck[0]
+        return True
+    card = deck[0]
     while True:
         position += 1
-        # if position > last_tile:
-        #     print(f"{players[playerTurn]['name']} cannot move with {drawingCard}")
-        #     return False
-        if position <= last_tile and board[position-1] == drawingCard:
+        if position > last_color_tile:
+            print(f"{players[playerTurn]['name']} cannot move with {card}.")
+            print(f"Removing {card} from deck")
+            del deck[0]
+            return False
+        if board[position - 1] == card:
             players[playerTurn]["tile"] = position
-            break
-    if position == last_tile:
-        print(f"{players[playerTurn]['name']} won!")
-        return True
-    del deck[0]
-    return False
-    
+            del deck[0]
+            return False
+
 def candyRealm():
     players = playerAssign()
     while True:
