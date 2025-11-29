@@ -158,10 +158,9 @@ def turn(players, deck, copies, board):
             playerTurn = 0
 
 def botChoice(players, deck, playerTurn, board):
-    startPos = players[playerTurn]['tile']
     drawingCard = deck[0]
     for i in range(len(board)):
-        if startPos + i < len(board) and board[startPos + i] == drawingCard:
+        if players[playerTurn]['tile'] + i < len(board) and board[players[playerTurn]['tile'] + i] == drawingCard:
             return 'd'
     if random.random() < random.random():
         return 's'
