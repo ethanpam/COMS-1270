@@ -109,7 +109,7 @@ def playingBoard(players, deck, board):
     print(f"{"START":>7}",end='')
     for title in board[:18]:
         print(f"{title:>4}", end='')
-    print(f"{"GOAL!":>7}",end='')
+    print(f"{"GOAL!":>8}",end='')
     print()
     print(f"{"CARDS":>7}", end='')
     for card in deck[:18]:
@@ -132,7 +132,9 @@ def turn(players, deck, copies, board):
                 print(f"{players[playerTurn]["name"]} chooses to draw {drawingcard} card.")
                 won = draw(players, deck, playerTurn, copies, board)
                 if won:
-                    return
+                    players[playerTurn]['tile'] = 20
+                    playingBoard(players, deck, board)
+                    return main()
                 else:
                     time.sleep(1)
             elif choice == 's':
@@ -142,10 +144,12 @@ def turn(players, deck, copies, board):
             choice = input(f"{players[playerTurn]["name"]}: Would you like to [d]raw a {deck[0]} card, [s]huffle the deck, or [q]uit: ")
             if choice.lower() == "d":
                 drawingcard = deck[0]  
-                won = draw(players, deck, playerTurn, copies, board)
                 print(f"{players[playerTurn]["name"]} chooses to draw {drawingcard} card.")
+                won = draw(players, deck, playerTurn, copies, board)
                 if won:
-                    return
+                    players[playerTurn]['tile'] = 20
+                    playingBoard(players, deck, board)
+                    return main()
             elif choice.lower() == "s":
                 shuffling("deck", deck)
             elif choice.lower() == "q":
@@ -162,7 +166,7 @@ def botChoice(players, deck, playerTurn, board):
     for i in range(len(board)):
         if players[playerTurn]['tile'] + i < len(board) and board[players[playerTurn]['tile'] + i] == drawingCard:
             return 'd'
-    if random.random() < random.random():
+    if random.random() < .35:
         return 's'
     else:
         return 'd'
@@ -206,19 +210,21 @@ def candyRealm():
     turn(players, deck, copies, board)
 
 def main():
+    printTitleMaterial()
     while True:
-        print("-----------------------")
+        print("----------------------------------------------------")
         choice = input("MAIN MENU: [p]lay game, [i]nstructions, or [q]uit: ")
-        if choice == "p":
+        if choice.lower() == "p":
             candyRealm()
             return
-        elif choice == "i":
+        elif choice.lower() == "i":
             instruction()
             return
-        elif choice == "q":
+        elif choice.lower() == "q":
             print("\nHave a good day, goodbye!\n")
             return
+        else:
+            print("Invalid Input")
 
 if __name__ == "__main__":
-    printTitleMaterial()
     main()
