@@ -18,7 +18,7 @@ def twoSumLoopsAll(nums, target):
 def twoSumDict(nums, target):
     num_dict = {} 
     for i, num in enumerate(nums):
-        needed = target - num #variables: i, num    enumerate() - built in python function that loops through a list and finds the element's index and returns pairs (index, value) (i,num)
+        needed = target - num 
         if needed in num_dict:
             return [num_dict[needed], i]
         num_dict[num] = i
